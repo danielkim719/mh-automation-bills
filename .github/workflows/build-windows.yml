@@ -36,10 +36,11 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Clean build folders
+      - name: Clean build and dist folders
+        shell: pwsh
         run: |
-          rmdir /S /Q build  || echo no build folder
-          rmdir /S /Q dist   || echo no dist folder
+          if (Test-Path build)  { Remove-Item build -Recurse -Force }
+          if (Test-Path dist)   { Remove-Item dist  -Recurse -Force }
 
       - name: Build EXE with PyInstaller
         run: |
