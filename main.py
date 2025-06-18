@@ -3,15 +3,19 @@ import re
 import sys
 import time
 import csv
-import configparser
 from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import configparser
 
-base_dir = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).parent
-config_path = base_dir / 'config.ini'
+if getattr(sys, 'frozen', False):
+    BASE_DIR = Path(sys.executable).parent
+else:
+    BASE_DIR = Path(__file__).parent
+
+config_path = BASE_DIR / 'config.ini'
 
 config = configparser.ConfigParser()
 config.read(config_path, encoding='utf-8')
@@ -19,7 +23,7 @@ config.read(config_path, encoding='utf-8')
 USER_ID = config["DEFAULT"]["USER_ID"]
 USER_PW = config["DEFAULT"]["USER_PW"]
 
-DOWNLOAD_DIR = Path(__file__).parent / "bills"
+DOWNLOAD_DIR = BASE_DIR / "bills"
 DOWNLOAD_DIR.mkdir(exist_ok=True)
 
 
