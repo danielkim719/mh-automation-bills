@@ -75,13 +75,20 @@ def download_and_rename_for_org(driver, wait, org_id: str, org_name: str, year: 
 
 
 def download_bills_for_organizations(orgs: list[dict], year: int, month: int):
-    # 셀레늄 실행 전, 다운로드 폴더 강제 지정
+    # ─── Selenium ChromeOptions 설정 ────────────────────────────
     options = webdriver.ChromeOptions()
+    # (1) 다운로드 폴더 지정
     options.add_experimental_option("prefs", {
         "download.default_directory": str(DOWNLOAD_DIR),
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
     })
+    # (2) 창 크기 지정: 충분히 넓게
+    options.add_argument("--window-size=1920,1080")
+    #    또는 전체화면 시작을 원하면
+    # options.add_argument("--start-maximized")
+    # ────────────────────────────────────────────────────────────
+
     driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 20)
 
@@ -154,4 +161,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    input("완료! 다음 달 업무를 위해 CSV 파일은 삭제하세요. 엔터를 누르면 종료됩니다…")
+    input("작업 성공! 엔터를 누르면 종료됩니다…")
