@@ -20,6 +20,7 @@ config_path = BASE_DIR / 'config.ini'
 config = configparser.ConfigParser()
 config.read(config_path, encoding='utf-8')
 
+BO_URL = config['DEFAULT']['BO_URL']
 USER_ID = config["DEFAULT"]["USER_ID"]
 USER_PW = config["DEFAULT"]["USER_PW"]
 
@@ -93,7 +94,7 @@ def download_bills_for_organizations(orgs: list[dict], year: int, month: int):
     wait = WebDriverWait(driver, 20)
 
     # 0) 로그인
-    driver.get("https://stage.d3l8lrlzxpuhlm.amplifyapp.com/login")
+    driver.get(f"{BO_URL}login")
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[type='text']"))).send_keys(USER_ID)
     driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(USER_PW)
     driver.find_element(By.CSS_SELECTOR, "button").click()
@@ -103,7 +104,7 @@ def download_bills_for_organizations(orgs: list[dict], year: int, month: int):
         org_id = org["id"]
         org_name = org["name"]
         # 1) 조직 페이지로 이동
-        driver.get(f"https://stage.d3l8lrlzxpuhlm.amplifyapp.com/organization/{org_id}")
+        driver.get(f"{BO_URL}organization/{org_id}")
 
         # 2) 요금제 표 로드 대기 및 페이지 맨 아래로 스크롤
         wait.until(EC.presence_of_element_located((By.XPATH,
